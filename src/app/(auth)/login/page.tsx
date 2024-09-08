@@ -14,7 +14,7 @@ export default function page() {
             <div className="md:w-1/2 w-full space-y-10 overflow-y-auto p-10">
                 <div className="space-y-1 text-center">
                     <h1 className="text-3xl font-bold">
-                        Login to bugbook
+                        Login to snapbook
                     </h1>
                     <p className="text-muted-foreground">
                         A place where even <span className="italic">you</span> can find a friend.
