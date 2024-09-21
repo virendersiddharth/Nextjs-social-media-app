@@ -1,6 +1,6 @@
 "use client"
 
-import { PostData } from "@/lib/types";
+import { LikeInfo, PostData } from "@/lib/types";
 import Link from "next/link";
 import UserAvatar from "../UserAvatar";
 import { formatRelativeDate } from "@/lib/utils";
@@ -8,6 +8,11 @@ import { useSession } from "@/app/(main)/SessionProvider";
 import PostMoreButton from "./PostMoreButton";
 import Linkify from "../Linkify";
 import UserTooltip from "../UserTooltip";
+import LikeButton from "./LikeButton";
+import BookmarkedButton from "./BookmarkedButton";
+import { useState } from "react";
+import { MessageSquare } from "lucide-react";
+import Comments from "../comments/Comments";
 
 interface PostProps {
     post: PostData
@@ -15,7 +20,13 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
 
+    const [showComments, setShowComments] = useState(false)
+
     const { user } = useSession();
+    const initialState: LikeInfo = {
+        likes: post._count.likes,
+        isLikedByUser:!!post.likes.length,
+    }
 
     return (
         <article
@@ -58,6 +69,42 @@ export default function Post({ post }: PostProps) {
                     {post.content}
                 </div>
             </Linkify>
+            <hr />
+            <div className="flex justify-between gap-5 items-center">
+                <div className="flex items-center gap-5">
+                    <LikeButton postId={post.id} initialState={initialState}/>
+                    <CommentButton post={post} onClick={() => setShowComments(!showComments)}/>
+                </div>
+                <BookmarkedButton postId={post.id} initialState={{
+                    isBookmarkedByUser : post.bookmarks.some((bookmark) => (
+                        bookmark.userId === user?.id
+                    ))
+                }}/>
+            </div>
+            {
+                showComments && 
+                <Comments post={post}/>
+            }
         </article>
+    )
+}
+
+interface CommentButtonProps{
+    post: PostData,
+    onClick: ()=> void
+}
+
+export function CommentButton({ post, onClick }: CommentButtonProps){
+    return (
+        <button
+            className="flex items-center gap-2"
+            onClick={onClick}
+        >
+            <MessageSquare className="size-5"/>
+            <span>
+                {post._count.comments} {" "}
+                <span className="hidden sm:inline">Comments</span>
+            </span>
+        </button>
     )
 }

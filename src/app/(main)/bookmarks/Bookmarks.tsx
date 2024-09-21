@@ -9,7 +9,7 @@ import { PostData, PostsPage } from "@/lib/types";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-export default function ForYouFeed() {
+export default function Bookmarks() {
     const {
         data,
         status,
@@ -18,9 +18,9 @@ export default function ForYouFeed() {
         isFetchingNextPage,
         isFetching
     } = useInfiniteQuery({
-        queryKey: ["post-feed", "for-you"],
+        queryKey: ["post-feed", "bookmark-info"],
         queryFn: ({ pageParam }) => kyInstance.get(
-            "/api/posts/for-you",
+            "/api/posts/bookmarked",
             pageParam ? { searchParams: { cursor: pageParam } } : {}
         ).json<PostsPage>(),
         initialPageParam: null as string | null,
@@ -37,7 +37,7 @@ export default function ForYouFeed() {
 
     if (status === "success" && !posts.length && !hasNextPage) {
         return <p className="text-center text-muted-foreground">
-            No one has posted anything yet.
+            You didn't bookmarked any post yet.
         </p>
     }
 

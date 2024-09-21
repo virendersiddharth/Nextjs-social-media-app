@@ -36,7 +36,7 @@ export default function FollowingFeed() {
     }
 
     if (status === "success" && !posts.length && !hasNextPage) {
-        return <p>
+        return <p className="text-center text-muted-foreground">
             There is no posts, Please follow someones
         </p>
     }
