@@ -67,8 +67,9 @@ export function useDeleteCommentMutation() {
   
     const mutation = useMutation({
       mutationFn: deleteComment,
-      onSuccess: async (deletedComment) => {
-        const queryKey: QueryKey = ["comments", deletedComment.postId];
+      onSuccess: async (deletedCommentPostId, deletedCommentId) => {
+        console.log("Deleted Comment = ", deletedCommentPostId, deletedCommentId)
+        const queryKey: QueryKey = ["comments", deletedCommentPostId];
   
         await queryClient.cancelQueries({ queryKey });
   
@@ -81,7 +82,7 @@ export function useDeleteCommentMutation() {
               pageParams: oldData.pageParams,
               pages: oldData.pages.map((page) => ({
                 previousCursor: page.previousCursor,
-                comments: page.comments.filter((c) => c.id !== deletedComment.id),
+                comments: page.comments.filter((c) => c.id !== deletedCommentId),
               })),
             };
           },

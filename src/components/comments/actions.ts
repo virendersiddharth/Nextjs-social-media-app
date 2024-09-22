@@ -83,5 +83,5 @@ export async function deleteComment(id: string) {
         })
     ])
 
-    return deletedComment;
+    return deletedComment.postId, deletedComment.id;
 }

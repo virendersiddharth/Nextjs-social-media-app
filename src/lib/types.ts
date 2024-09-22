@@ -102,7 +102,7 @@ export function getCommentDataInclude(loggedInUserId: string){
     return {
         user : {
             select : getUserDetails(loggedInUserId),
-        }
+        },
     } satisfies Prisma.CommentInclude
 }
 
